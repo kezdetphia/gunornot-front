@@ -9,6 +9,7 @@ import ProductsPage from "./pages/ProductsPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthContextProvider } from "./context/authContext";
 import "./index.css";
+import Profile from "./pages/Profile";
 
 const Main = () => {
   return (
@@ -22,6 +23,14 @@ const Main = () => {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/app/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             }
           />
