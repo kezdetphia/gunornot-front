@@ -38,6 +38,7 @@ function ProductsPage() {
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
+  console.log("product", products[currentIndex]);
   return (
     // <IonContent fullscreen={true} className="ion-padding">
     <div>

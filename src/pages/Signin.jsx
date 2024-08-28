@@ -250,7 +250,7 @@ function Signin() {
 
         if (storedToken === response.data.token) {
           setUserInfo(response.data.userData);
-          console.log("User Info:", response.data.userData);
+          console.log("User Info after signin:", response.data.userData);
           dismiss();
           alert({
             header: "Success",

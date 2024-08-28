@@ -4,75 +4,28 @@ import { heart, close } from "ionicons/icons";
 import StarIcon from "../StarIcon";
 import useUpdateVotes from "../../hooks/useUpdateVotes";
 import "./ProductCard.css";
-import { useEffect, useState } from "react";
-import { Storage } from "@ionic/storage";
-import axios from "axios";
 
 function ProductCard({ product, onVote }) {
   const { likes, dislikes, updateVotes } = useUpdateVotes(
     product.totalLikes,
-    product.totalDislikes,
-    product._id
+    product.totalDislikes
   );
 
-  // const [user, setUser] = useState(null);
-  // useEffect(() => {
-  //   const fetchUserDetails = async () => {
-  //     try {
-  //       const token = localStorage.getItem("auth-token"); // Or get the token from cookies
-  //       const response = await axios.get("http://localhost:3001/user/me", {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-  //       setUser(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching user details:", error);
-  //     }
-  //   };
-
-  //   fetchUserDetails();
-  // }, []);
-
-  // console.log("logged user", user);
-
   const totalVotes = likes + dislikes;
-  const ratingPercentage = (likes / totalVotes) * 100;
-  const rating = (ratingPercentage / 100) * 5; // Convert percentage to a 5-star rating
+  const ratingPercentage = totalVotes ? (likes / totalVotes) * 100 : 0;
+  const rating = (ratingPercentage / 100) * 5;
 
   const getFillPercentage = (index) => {
     const diff = rating - index;
-    if (diff >= 1) {
-      return 100;
-    } else if (diff > 0) {
-      return diff * 100;
-    } else {
-      return 0;
-    }
+    if (diff >= 1) return 100;
+    if (diff > 0) return diff * 100;
+    return 0;
   };
 
-  const handleVote = (type) => {
-    updateVotes(type);
+  const handleVote = async (type) => {
+    await updateVotes(type, product._id);
     onVote(type, product._id);
   };
-
-  // Initialize Ionic Storage
-  // const storage = new Storage();
-  // storage.create();
-
-  // useEffect(() => {
-  //   const printToken = async () => {
-  //     try {
-  //       await storage.create();
-  //       const token = await storage.get("auth-token");
-  //       console.log("Token from storage:", token);
-  //     } catch (error) {
-  //       console.error("Error retrieving token:", error);
-  //     }
-  //   };
-
-  //   printToken();
-  // }, []);
 
   return (
     <div className="image-container">
