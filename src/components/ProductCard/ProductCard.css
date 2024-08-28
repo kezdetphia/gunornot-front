@@ -1,0 +1,91 @@
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.name-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: black;
+}
+
+.rating-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.star-icon {
+  font-size: 20px;
+  color: gold;
+}
+
+.star-icon.full {
+  color: gold;
+}
+
+.star-icon.three-quarters {
+  background: linear-gradient(90deg, gold 75%, rgba(255, 255, 255, 0.7) 75%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.star-icon.half {
+  background: linear-gradient(90deg, gold 50%, rgba(255, 255, 255, 0.7) 50%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.star-icon.quarter {
+  background: linear-gradient(90deg, gold 25%, rgba(255, 255, 255, 0.7) 25%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.star-icon.empty {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.rating-number {
+  margin-left: 5px;
+  font-size: 14px;
+  color: black;
+}
+
+.icon-container {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+}
+
+.icon {
+  background: white;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 24px;
+  color: black;
+}
+
+.heart-icon {
+  color: red;
+}
+
+.close-icon {
+  color: black;
+}
