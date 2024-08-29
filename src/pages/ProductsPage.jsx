@@ -1,10 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
-import { IonButton, IonContent, IonIcon } from "@ionic/react";
-import { arrowBack, menu, navigate } from "ionicons/icons";
 import { useNavigate } from "react-router-dom";
-
+import { IonSpinner } from "@ionic/react";
 function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +41,17 @@ function ProductsPage() {
     // <IonContent fullscreen={true} className="ion-padding">
     <div>
       {loading ? (
-        <p>Loading...</p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100px",
+            width: "100px",
+          }}
+        >
+          <IonSpinner />
+        </div>
       ) : error ? (
         <p>{error}</p>
       ) : (

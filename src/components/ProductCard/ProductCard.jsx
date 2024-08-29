@@ -23,8 +23,8 @@ function ProductCard({ product, onVote }) {
   };
 
   const handleVote = async (type) => {
-    await updateVotes(type, product._id);
-    onVote(type, product._id);
+    const updatedProduct = await updateVotes(type, product._id);
+    onVote(type, updatedProduct);
   };
 
   return (
