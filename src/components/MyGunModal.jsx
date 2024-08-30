@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   IonButtons,
   IonButton,
@@ -9,11 +9,10 @@ import {
   IonTitle,
   IonItem,
   IonInput,
+  IonTextarea,
 } from "@ionic/react";
-import { OverlayEventDetail } from "@ionic/core/components";
 
 function MyGunModal({ product, isOpen, onClose, onSave }) {
-  const modal = useRef(null);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -28,24 +27,17 @@ function MyGunModal({ product, isOpen, onClose, onSave }) {
     }
   }, [product]);
 
-  function confirm() {
-    onSave(formData);
-    onClose();
-  }
-
-  function onWillDismiss(ev) {
-    if (ev.detail.role === "confirm") {
-      onSave(ev.detail.data);
-    }
-    onClose();
-  }
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const confirm = () => {
+    onSave(formData);
+    onClose();
   };
 
   return (
@@ -76,13 +68,12 @@ function MyGunModal({ product, isOpen, onClose, onSave }) {
           />
         </IonItem>
         <IonItem>
-          <IonInput
+          <IonTextarea
             name="description"
             value={formData.description}
             onIonChange={handleInputChange}
             label="Enter description"
             labelPlacement="stacked"
-            type="text"
             placeholder="Description"
           />
         </IonItem>

@@ -10,17 +10,20 @@ import {
   IonThumbnail,
 } from "@ionic/react";
 import axios from "axios";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-function MyProductsDisplay({ myProducts }) {
-  const handleArchive = (productId) => {
-    console.log(`Archive product with ID: ${productId}`);
-    // Add your archive logic here
-  };
+function MyProductsDisplay({ initialProducts, setProductsUpdated }) {
+  const [myProducts, setMyProducts] = useState(initialProducts);
 
-  const handleFavorite = (productId) => {
-    console.log(`Favorite product with ID: ${productId}`);
-    // Add your favorite logic here
+  useEffect(() => {
+    console.log("Initial Products:", initialProducts);
+    setMyProducts(initialProducts);
+    console.log("My Productsssss:", myProducts);
+  }, [initialProducts]);
+
+  const handleEditProduct = (productId) => {
+    console.log(`Edit product with ID: ${productId}`);
+    // Add your edit logic here
   };
 
   const handleDeleteProduct = async (productId) => {
@@ -29,16 +32,18 @@ function MyProductsDisplay({ myProducts }) {
         id: productId,
       });
       console.log("Product deleted");
+
+      setMyProducts(myProducts.filter((product) => product._id !== productId));
+      setProductsUpdated((prevState) => !prevState);
     } catch (error) {
       console.error("Error deleting product:", error);
     }
-    window.location.reload();
   };
 
   return (
     <>
       <IonList>
-        {myProducts.map((product, index) => (
+        {myProducts?.map((product, index) => (
           <IonItemSliding key={index}>
             <IonItem>
               <IonThumbnail slot="start">
@@ -56,7 +61,7 @@ function MyProductsDisplay({ myProducts }) {
             </IonItem>
 
             <IonItemOptions side="end">
-              <IonItemOption onClick={() => handleFavorite(product?._id)}>
+              <IonItemOption onClick={() => handleEditProduct(product?._id)}>
                 Edit
               </IonItemOption>
               <IonItemOption
