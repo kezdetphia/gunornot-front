@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { imageDb } from "../firebase/firebaseConfig";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import {
   IonButton,
   IonImg,
@@ -17,91 +17,83 @@ import {
   IonCol,
 } from "@ionic/react";
 import axios from "axios";
-function AddProduct({ user, setUserInfo, setProductsUpdated }) {
-  // const { setUserInfo } = useAuth();
-  const [imgs, setImgs] = useState([]); // State to store multiple images
-  const [imgUrls, setImgUrls] = useState([]);
-  const [uploadedImgUrls, setUploadedImgUrls] = useState([]); // State to store the URLs of the uploaded images
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-  });
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  const [isUploadDisabled, setIsUploadDisabled] = useState(true);
 
+function AddProduct({ user, setUserInfo, setProductsUpdated }) {
+  const [selectedImages, setSelectedImages] = useState([]); // State to store selected images
+  const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // State to store uploaded image URLs
+  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [isUploadDisabled, setIsUploadDisabled] = useState(true);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const [allImagesUploaded, setAllImagesUploaded] = useState(false); // Track if all images are uploaded
+
+  // Handle image upload to Firebase Storage
   const handleUpload = () => {
-    setIsSubmitDisabled(false);
-    if (imgs.length > 0) {
-      const uploadPromises = imgs.map((img) => {
-        const imgRef = ref(imageDb, `files/${v4()}`);
-        return uploadBytes(imgRef, img).then((value) => {
-          return getDownloadURL(value.ref);
-        });
+    setIsSubmitDisabled(true); // Disable submit button during upload
+
+    if (selectedImages.length > 0) {
+      const uploadPromises = selectedImages.map((image) => {
+        const imageRef = ref(imageDb, `files/${uuidv4()}`);
+        return uploadBytes(imageRef, image).then((snapshot) =>
+          getDownloadURL(snapshot.ref)
+        );
       });
 
+      // Update state with unique image URLs after upload
       Promise.all(uploadPromises).then((urls) => {
-        setImgUrls((data) => [...new Set([...data, ...urls])]); // Ensure unique URLs
-        setUploadedImgUrls((data) => [...new Set([...data, ...urls])]); // Store the URLs of the uploaded images
+        const uniqueUrls = [...new Set([...uploadedImageUrls, ...urls])];
+        setUploadedImageUrls(uniqueUrls);
+        setAllImagesUploaded(true); // Mark all images as uploaded
+        setIsSubmitDisabled(false); // Enable submit button after all images are uploaded
       });
     }
   };
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      const imgs = await listAll(ref(imageDb, "files/"));
-      const urls = await Promise.all(
-        imgs.items.map((val) => getDownloadURL(val))
-      );
-      setImgUrls([...new Set(urls)]); // Ensure unique URLs
-    };
-
-    fetchImages();
-  }, []);
-
+  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  // Handle file input changes
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    setImgs(files);
+    setSelectedImages(files);
     setIsUploadDisabled(false);
+    setAllImagesUploaded(false); // Reset the upload status
   };
 
+  // Handle form submission
   const handleSubmit = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/product/addproduct",
-        {
-          name: formData.name,
-          img: uploadedImgUrls, // Send array of image URLs
-          userId: user?._id,
-          description: formData.description,
-        }
-      );
-      console.log(response);
+    if (allImagesUploaded) {
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/product/addproduct",
+          {
+            name: formData.name,
+            img: uploadedImageUrls, // Send array of image URLs
+            userId: user?._id,
+            description: formData.description,
+          }
+        );
 
-      setUserInfo((prevUser) => ({
-        ...prevUser,
-        products: [...prevUser.products, response.data._id],
-      }));
-      setProductsUpdated((prevState) => !prevState);
-      // Clear the form
-      setFormData({
-        name: "",
-        description: "",
-      });
-      setUploadedImgUrls([]);
-    } catch (error) {
-      console.error("Failed to submit data", error);
-      if (error.response) {
-        console.error("Response data:", error.response.data);
-        console.error("Response status:", error.response.status);
-        console.error("Response headers:", error.response.headers);
+        // Update user info and trigger product update
+        setUserInfo((prevUser) => ({
+          ...prevUser,
+          products: [...prevUser.products, response.data._id],
+        }));
+        setProductsUpdated((prevState) => !prevState);
+
+        // Clear form and reset state
+        setFormData({ name: "", description: "" });
+        setUploadedImageUrls([]);
+        setSelectedImages([]);
+        setIsSubmitDisabled(true);
+        setIsUploadDisabled(true);
+      } catch (error) {
+        console.error("Failed to submit data", error);
+        if (error.response) {
+          console.error("Response data:", error.response.data);
+        }
       }
     }
   };
@@ -110,7 +102,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
     <>
       <IonList>
         <IonListHeader>
-          <IonLabel>Post Your Gun</IonLabel>
+          <IonLabel>Post Your Product</IonLabel>
         </IonListHeader>
         <IonItem>
           <IonInput
@@ -119,7 +111,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
             onIonChange={handleInputChange}
             label="Model"
             labelPlacement="floating"
-            placeholder="Enter Gun's Name"
+            placeholder="Enter Product Name"
           />
         </IonItem>
         <IonItem>
@@ -129,7 +121,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
             onIonChange={handleInputChange}
             label="Description"
             labelPlacement="floating"
-            placeholder="Talk about your gun"
+            placeholder="Describe your product"
           />
         </IonItem>
         <IonItem>
@@ -146,8 +138,8 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
       </IonItem>
       <IonGrid>
         <IonRow>
-          {uploadedImgUrls.map((url, index) => (
-            <IonCol size="4" size-md="2" key={index} className="image-col">
+          {uploadedImageUrls.map((url, index) => (
+            <IonCol size="4" size-md="2" key={index}>
               <IonThumbnail>
                 <IonImg
                   src={url}
