@@ -1,15 +1,20 @@
-import { IonCol, IonContent, IonGrid, IonRow, IonText } from "@ionic/react";
+import {
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonImg,
+  IonRow,
+  IonText,
+} from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-import { IonNav } from "@ionic/react";
-import ProductsPage from "./ProductsPage";
-import FirebaseImageUpload from "../components/FirebaseImageUpload";
 import { useAuth } from "../context/authContext";
-import ProfileProductCards from "../components/ProfileProductCards/ProfileProductCards";
 import UserAvatar from "../components/UserAvatar";
 import axios from "axios";
+import MyProductsDisplay from "../components/MyProductsDisplay";
+import AddProduct from "../components/AddProduct";
+import MyGunModal from "../components/MyGunModal";
 
 function Profile() {
   const { user } = useAuth();
@@ -17,7 +22,7 @@ function Profile() {
   const [myProducts, setMyProducts] = useState([]);
 
   useEffect(() => {
-    const getMyProducts = async () => {
+    const fetchMyProducts = async () => {
       if (!user?.products || user.products.length === 0) {
         console.log("No products found for user");
         return;
@@ -39,7 +44,7 @@ function Profile() {
       }
     };
 
-    getMyProducts();
+    fetchMyProducts();
   }, [user]);
 
   return (
@@ -53,22 +58,18 @@ function Profile() {
                 <h3>{user?.username}</h3>
               </IonText>
             </IonCol>
+            <MyProductsDisplay myProducts={myProducts} />
 
-            <ProfileProductCards myProducts={myProducts} />
-            {/* <p
-              style={{ textAlign: "center", maxWidth: "80%", margin: "0 auto" }}
-            >
-              Here's a small text description for the content. Nothing more,
-              nothing less.
-            </p> */}
+            {/* <ProfileProductCards myProducts={myProducts} /> */}
           </IonCol>
         </IonRow>
         <IonRow>
           <IonCol>
-            <FirebaseImageUpload user={user} />
+            <AddProduct user={user} />
           </IonCol>
         </IonRow>
       </IonGrid>
+      <MyGunModal />
     </IonContent>
 
     // <div>
@@ -90,3 +91,68 @@ function Profile() {
 }
 
 export default Profile;
+
+// import React, { useEffect, useState } from "react";
+// import {
+//   IonContent,
+//   IonGrid,
+//   IonRow,
+//   IonCol,
+//   IonList,
+//   IonListHeader,
+//   IonLabel,
+//   IonItem,
+//   IonInput,
+//   IonTextarea,
+//   IonButton,
+//   IonThumbnail,
+//   IonImg,
+//   IonText,
+// } from "@ionic/react";
+// import axios from "axios";
+// import AddProduct from "../components/AddProduct";
+// import MyProductsDisplay from "../components/MyProductsDisplay";
+// import { useAuth } from "../context/authContext";
+
+// function Profile() {
+//   const { user } = useAuth();
+//   const [myProducts, setMyProducts] = useState([]);
+
+//   useEffect(() => {
+//     const fetchMyProducts = async () => {
+//       try {
+//         const response = await axios.post(
+//           "http://localhost:3001/product/getmyproducts",
+//           { userId: user?._id }
+//         );
+//         setMyProducts(response.data);
+//       } catch (error) {
+//         console.error("Error fetching products:", error);
+//       }
+//     };
+
+//     fetchMyProducts();
+//   }, [user]);
+
+//   return (
+//     <IonContent className="ion-padding">
+//       <IonGrid>
+//         <IonRow>
+//           <IonCol>
+//             <MyProductsDisplay
+//               myProducts={myProducts}
+//               setMyProducts={setMyProducts}
+//             />
+//           </IonCol>
+//         </IonRow>
+//         <IonRow>
+//           <IonCol>
+//             <AddProduct user={user} setMyProducts={setMyProducts} />
+//           </IonCol>
+//         </IonRow>
+//       </IonGrid>
+//     </IonContent>
+//   );
+// }
+
+// export default Profile;
