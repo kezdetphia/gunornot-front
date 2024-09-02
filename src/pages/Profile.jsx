@@ -50,7 +50,7 @@ function Profile() {
             <UserAvatar user={user} />
             <IonCol className="ion-no-padding">
               <IonText>
-                <h3>{user?.username}</h3>
+                <h3>Hello {user?.username}</h3>
               </IonText>
             </IonCol>
             <MyProductsDisplay

@@ -89,3 +89,73 @@
 .close-icon {
   color: black;
 }
+
+/* --------new one */
+/* 
+.product-card {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.image-wrapper {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.rating-overlay {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.star-wrapper {
+  position: relative;
+  display: inline-block;
+  font-size: 20px;
+  color: gold;
+}
+
+.star-background {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.star-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  color: gold;
+}
+
+.rating-number {
+  margin-left: 8px;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.icon {
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.heart-icon {
+  color: red;
+}
+
+.close-icon {
+  color: black;
+} */

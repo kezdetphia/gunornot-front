@@ -17,6 +17,7 @@ import {
   IonCol,
 } from "@ionic/react";
 import axios from "axios";
+import heic2any from "heic2any";
 
 function AddProduct({ user, setUserInfo, setProductsUpdated }) {
   const [selectedImages, setSelectedImages] = useState([]); // State to store selected images
@@ -55,10 +56,31 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
   };
 
   // Handle file input changes
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
-    setSelectedImages(files);
-    setIsUploadDisabled(false);
+    const convertedFiles = await Promise.all(
+      files.map(async (file) => {
+        if (file.type === "image/heic") {
+          try {
+            const convertedBlob = await heic2any({
+              blob: file,
+              toType: "image/jpeg",
+            });
+            return new File([convertedBlob], `${file.name}.jpeg`, {
+              type: "image/jpeg",
+            });
+          } catch (error) {
+            console.error("Failed to convert HEIC to JPEG", error);
+            return null; // Skip this file if conversion fails
+          }
+        }
+        return file; // Return the original file if it's not HEIC
+      })
+    );
+
+    const validFiles = convertedFiles.filter(Boolean); // Filter out any null values
+    setSelectedImages(validFiles);
+    setIsUploadDisabled(validFiles.length === 0);
     setAllImagesUploaded(false); // Reset the upload status
   };
 
