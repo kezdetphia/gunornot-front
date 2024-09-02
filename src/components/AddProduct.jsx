@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { imageDb } from "../firebase/firebaseConfig";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import {
   IonButton,
@@ -15,21 +15,43 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonLoading, // Import IonLoading
 } from "@ionic/react";
 import axios from "axios";
 import heic2any from "heic2any";
 
 function AddProduct({ user, setUserInfo, setProductsUpdated }) {
-  const [selectedImages, setSelectedImages] = useState([]); // State to store selected images
-  const [uploadedImageUrls, setUploadedImageUrls] = useState([]); // State to store uploaded image URLs
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
   const [formData, setFormData] = useState({ name: "", description: "" });
-  const [isUploadDisabled, setIsUploadDisabled] = useState(true);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  const [allImagesUploaded, setAllImagesUploaded] = useState(false); // Track if all images are uploaded
+  const [allImagesUploaded, setAllImagesUploaded] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null); // Create ref for file input
 
-  // Handle image upload to Firebase Storage
+  // Function to check form validity
+  const validateForm = () => {
+    const isFormValid =
+      selectedImages.length > 0 &&
+      formData.name.trim().length > 0 &&
+      formData.description.trim().length > 0;
+    setIsSubmitDisabled(!isFormValid);
+  };
+
+  // Enable submit button when conditions are met
+  useEffect(() => {
+    validateForm();
+  }, [selectedImages, formData]);
+
+  useEffect(() => {
+    if (selectedImages.length > 0 && !allImagesUploaded) {
+      handleUpload();
+    }
+  }, [selectedImages]);
+
   const handleUpload = () => {
-    setIsSubmitDisabled(true); // Disable submit button during upload
+    setIsSubmitDisabled(true);
+    // setLoading(true); // Show loading indicator
 
     if (selectedImages.length > 0) {
       const uploadPromises = selectedImages.map((image) => {
@@ -39,24 +61,33 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
         );
       });
 
-      // Update state with unique image URLs after upload
-      Promise.all(uploadPromises).then((urls) => {
-        const uniqueUrls = [...new Set([...uploadedImageUrls, ...urls])];
-        setUploadedImageUrls(uniqueUrls);
-        setAllImagesUploaded(true); // Mark all images as uploaded
-        setIsSubmitDisabled(false); // Enable submit button after all images are uploaded
-      });
+      Promise.all(uploadPromises)
+        .then((urls) => {
+          const uniqueUrls = [...new Set([...uploadedImageUrls, ...urls])];
+          setUploadedImageUrls(uniqueUrls);
+          setAllImagesUploaded(true);
+          validateForm(); // Revalidate form after upload
+          setLoading(false); // Hide loading indicator after upload completes
+        })
+        .catch((error) => {
+          console.error("Failed to upload images", error);
+          setLoading(false); // Hide loading indicator on error
+        });
     }
   };
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => {
+      const newFormData = { ...prevData, [name]: value };
+      validateForm(); // Revalidate form whenever input changes
+      return newFormData;
+    });
   };
 
-  // Handle file input changes
   const handleFileChange = async (e) => {
+    setLoading(true); // Start loader as soon as file selection begins
+
     const files = Array.from(e.target.files);
     const convertedFiles = await Promise.all(
       files.map(async (file) => {
@@ -71,20 +102,20 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
             });
           } catch (error) {
             console.error("Failed to convert HEIC to JPEG", error);
-            return null; // Skip this file if conversion fails
+            return null;
           }
         }
-        return file; // Return the original file if it's not HEIC
+        return file;
       })
     );
 
-    const validFiles = convertedFiles.filter(Boolean); // Filter out any null values
+    const validFiles = convertedFiles.filter(Boolean);
     setSelectedImages(validFiles);
-    setIsUploadDisabled(validFiles.length === 0);
-    setAllImagesUploaded(false); // Reset the upload status
+    setAllImagesUploaded(false); // Reset flag until images are uploaded
+
+    setLoading(false); // Hide loader after file processing is done
   };
 
-  // Handle form submission
   const handleSubmit = async () => {
     if (allImagesUploaded) {
       try {
@@ -92,25 +123,27 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
           "http://localhost:3001/product/addproduct",
           {
             name: formData.name,
-            img: uploadedImageUrls, // Send array of image URLs
+            img: uploadedImageUrls,
             userId: user?._id,
             description: formData.description,
           }
         );
 
-        // Update user info and trigger product update
         setUserInfo((prevUser) => ({
           ...prevUser,
           products: [...prevUser.products, response.data._id],
         }));
         setProductsUpdated((prevState) => !prevState);
 
-        // Clear form and reset state
         setFormData({ name: "", description: "" });
         setUploadedImageUrls([]);
         setSelectedImages([]);
-        setIsSubmitDisabled(true);
-        setIsUploadDisabled(true);
+        setAllImagesUploaded(false); // Reset flag after successful submit
+
+        // Reset file input
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
       } catch (error) {
         console.error("Failed to submit data", error);
         if (error.response) {
@@ -147,11 +180,13 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
           />
         </IonItem>
         <IonItem>
-          <input type="file" multiple onChange={handleFileChange} />
+          <input
+            type="file"
+            multiple
+            onChange={handleFileChange}
+            ref={fileInputRef} // Attach ref to file input
+          />
         </IonItem>
-        <IonButton disabled={isUploadDisabled} onClick={handleUpload}>
-          Upload
-        </IonButton>
       </IonList>
       <IonItem>
         <IonButton onClick={handleSubmit} disabled={isSubmitDisabled}>
@@ -177,6 +212,11 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
           ))}
         </IonRow>
       </IonGrid>
+      <IonLoading
+        isOpen={loading} // Control loading indicator visibility with state
+        message={"Uploading images..."}
+        spinner="crescent"
+      />
     </>
   );
 }
