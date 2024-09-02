@@ -1,43 +1,27 @@
-// import React from "react";
-// import { Navigate, Outlet } from "react-router-dom";
-// import { isLoggedIn } from "../services/StorageService";
-
-// const PublicRoute = ({ storage }) => {
-//   const isAuthenticated = isLoggedIn(storage);
-
-//   return !isAuthenticated ? <Outlet /> : <Navigate to="/" />;
-// };
-
-// export default PublicRoute;
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { getToken } from "../services/StorageService";
+import { useAuth } from "../context/authContext";
+import { IonSpinner } from "@ionic/react";
 
 const PublicRoute = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { isAuthenticated, authLoading } = useAuth();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const token = await getToken("auth-token");
-        setIsAuthenticated(!!token); // Convert token to a boolean
-      } catch (error) {
-        console.error("Failed to get token:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
+  if (authLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <IonSpinner />
+      </div>
+    );
   }
 
-  return !isAuthenticated ? <Outlet /> : <Navigate to="/app/products" />;
+  return isAuthenticated ? <Navigate to="/app/products" /> : <Outlet />;
 };
 
 export default PublicRoute;
