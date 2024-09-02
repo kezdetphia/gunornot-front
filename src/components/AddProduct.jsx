@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { imageDb } from "../firebase/firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
@@ -30,24 +30,18 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
   const fileInputRef = useRef(null); // Create ref for file input
 
   // Function to check form validity
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const isFormValid =
       selectedImages.length > 0 &&
       formData.name.trim().length > 0 &&
       formData.description.trim().length > 0;
     setIsSubmitDisabled(!isFormValid);
-  };
+  }, [selectedImages.length, formData.name, formData.description]);
 
   // Enable submit button when conditions are met
   useEffect(() => {
     validateForm();
-  }, [selectedImages, formData]);
-
-  useEffect(() => {
-    if (selectedImages.length > 0 && !allImagesUploaded) {
-      handleUpload();
-    }
-  }, [selectedImages]);
+  }, [selectedImages.length, formData, validateForm]);
 
   const handleUpload = () => {
     setIsSubmitDisabled(true);
@@ -75,6 +69,12 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
         });
     }
   };
+
+  useEffect(() => {
+    if (selectedImages.length > 0 && !allImagesUploaded) {
+      handleUpload();
+    }
+  }, [selectedImages, allImagesUploaded, handleUpload]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

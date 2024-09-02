@@ -1,15 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
-import { useNavigate } from "react-router-dom";
 import { IonSpinner } from "@ionic/react";
 function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
