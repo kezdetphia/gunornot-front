@@ -1,0 +1,21 @@
+.submit-button-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.submit-button {
+  width: 100%;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  background-color: #337ab7;
+  color: #ffffff;
+}
+
+.uploaded-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-top: 20px;
+  border-radius: 10px; /* Optional: Add border-radius if needed */
+}

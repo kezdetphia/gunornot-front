@@ -25,7 +25,14 @@ function ProfileProductCards({ myProducts }) {
                 <IonCardSubtitle>{product?.name}</IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
-                <IonText>
+                <IonText
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    height: "100%",
+                  }}
+                >
                   <p>Rating: {product.rating?.$numberDecimal}</p>
                   <p>Total Likes: {product?.totalLikes}</p>
                   <p>Total Dislikes: {product?.totalDislikes}</p>
