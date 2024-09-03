@@ -10,6 +10,9 @@ import {
   IonPage,
   IonButtons,
   IonMenuButton,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from "@ionic/react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
@@ -32,12 +35,25 @@ const Layout = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
-          <IonButton onClick={handleSignOut}>Sign Out</IonButton>
-        </IonContent>
-        <IonContent className="ion-padding">
-          <IonButton onClick={() => navigate("/app/profile")}>
-            Profile
-          </IonButton>
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <IonButton
+                  onClick={() => navigate("/app/profile")}
+                  expand="block"
+                >
+                  Profile
+                </IonButton>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonButton onClick={handleSignOut} expand="block">
+                  Sign Out
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         </IonContent>
       </IonMenu>
       <IonPage id="main-content">

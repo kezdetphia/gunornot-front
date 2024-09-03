@@ -18,7 +18,7 @@ function MyProductsDisplay({ initialProducts, setProductsUpdated }) {
   useEffect(() => {
     console.log("Initial Products:", initialProducts);
     setMyProducts(initialProducts);
-    console.log("My Productsssss:", myProducts);
+    console.log("My Products:", myProducts);
   }, [initialProducts]);
 
   const handleEditProduct = (productId) => {
@@ -40,22 +40,32 @@ function MyProductsDisplay({ initialProducts, setProductsUpdated }) {
     }
   };
 
+  // Sort products by rating in descending order
+  const sortedProducts = myProducts.slice().sort((a, b) => {
+    const ratingA = parseFloat(a?.rating?.$numberDecimal) || 0;
+    const ratingB = parseFloat(b?.rating?.$numberDecimal) || 0;
+    return ratingB - ratingA;
+  });
+
   return (
     <>
-      <IonList>
-        {myProducts?.map((product, index) => (
+      <IonList className="ion-padding-top ">
+        {sortedProducts?.map((product, index) => (
           <IonItemSliding key={index}>
             <IonItem>
               <IonThumbnail slot="start">
                 <IonImg src={product.img} />
               </IonThumbnail>
               <IonLabel>
-                <IonText>{product?.name}</IonText>
-                <IonText>{product?.description}</IonText>
-                <IonText>
-                  {isNaN(parseFloat(product?.rating?.$numberDecimal))
-                    ? "No Rating"
-                    : parseFloat(product?.rating?.$numberDecimal).toFixed(2)}
+                <IonText
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <span>{product?.name}</span>
+                  <span>
+                    {isNaN(parseFloat(product?.rating?.$numberDecimal))
+                      ? "No Rating"
+                      : parseFloat(product?.rating?.$numberDecimal).toFixed(2)}
+                  </span>
                 </IonText>
               </IonLabel>
             </IonItem>

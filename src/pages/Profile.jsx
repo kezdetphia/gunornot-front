@@ -1,10 +1,17 @@
-import { IonCol, IonContent, IonGrid, IonRow, IonText } from "@ionic/react";
+import {
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonItem,
+  IonRow,
+  IonText,
+} from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/authContext";
 import UserAvatar from "../components/UserAvatar";
 import axios from "axios";
 import MyProductsDisplay from "../components/MyProductsDisplay";
-import AddProduct from "../components/AddProduct";
+import AddProduct from "../components/AddProduct/AddProduct";
 
 function Profile() {
   const { user, setUserInfo } = useAuth();
@@ -43,7 +50,7 @@ function Profile() {
   }, [user, productsUpdated]);
 
   return (
-    <IonContent className="ion-padding">
+    <IonContent className="ion-no-padding">
       <IonGrid>
         <IonRow className="ion-justify-content-center">
           <IonCol size="12" className="ion-text-center ion-no-padding">

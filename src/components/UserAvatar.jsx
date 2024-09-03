@@ -12,7 +12,7 @@ const UserAvatar = ({ user }) => {
   return (
     <IonAvatar
       style={{
-        margin: "0 auto",
+        margin: "15px auto",
         backgroundColor: "#ccc",
         display: "flex",
         alignItems: "center",
