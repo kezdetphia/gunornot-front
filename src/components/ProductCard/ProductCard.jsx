@@ -1,11 +1,11 @@
 import React from "react";
-import { IonImg, IonIcon } from "@ionic/react";
+import { IonImg, IonIcon, IonButton } from "@ionic/react";
 import { heart, close } from "ionicons/icons";
 import StarIcon from "../StarIcon";
 import useUpdateVotes from "../../hooks/useUpdateVotes";
 import "./ProductCard.css";
 
-function ProductCard({ product, onVote }) {
+const ProductCard = React.memo(({ product, onVote }) => {
   const { likes, dislikes, updateVotes } = useUpdateVotes(
     product.totalLikes,
     product.totalDislikes
@@ -42,19 +42,23 @@ function ProductCard({ product, onVote }) {
         <span className="rating-number">{rating.toFixed(1)}</span>
       </div>
       <div className="icon-container">
-        <IonIcon
-          icon={close}
-          className="icon close-icon"
+        <IonButton
+          fill="clear"
+          className="icon-button"
           onClick={() => handleVote("dislike")}
-        />
-        <IonIcon
-          icon={heart}
-          className="icon heart-icon"
+        >
+          <IonIcon icon={close} className="icon close-icon" />
+        </IonButton>
+        <IonButton
+          fill="clear"
+          className="icon-button"
           onClick={() => handleVote("like")}
-        />
+        >
+          <IonIcon icon={heart} className="icon heart-icon" />
+        </IonButton>
       </div>
     </div>
   );
-}
+});
 
 export default ProductCard;

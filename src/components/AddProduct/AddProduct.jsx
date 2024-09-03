@@ -24,6 +24,10 @@ import {
 import axios from "axios";
 import heic2any from "heic2any";
 
+//TODO: Only allow 5 images to be uploaded
+// - Add a delete image button to the uploaded images
+// - When deleting the image, remove it from the uploadedImageUrls array and firebase!
+
 function AddProduct({ user, setUserInfo, setProductsUpdated }) {
   const [selectedImages, setSelectedImages] = useState([]);
   const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
@@ -173,6 +177,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
                 label="Model"
                 labelPlacement="floating"
                 placeholder="Enter Product Name"
+                maxLength={12}
               />
             </IonItem>
             <IonItem>

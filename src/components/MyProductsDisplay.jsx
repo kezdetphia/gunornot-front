@@ -6,7 +6,6 @@ import {
   IonItemSliding,
   IonLabel,
   IonList,
-  IonListHeader,
   IonText,
   IonThumbnail,
 } from "@ionic/react";
@@ -53,11 +52,7 @@ function MyProductsDisplay({ initialProducts, setProductsUpdated }) {
       <IonList className="ion-padding-top ">
         {sortedProducts?.map((product, index) => (
           <IonItemSliding key={index}>
-            <IonItem
-              style={{
-                backgroundColor: index === 0 ? "#FFD700" : "transparent", // Change background color for top-rated product
-              }}
-            >
+            <IonItem>
               <IonThumbnail slot="start">
                 <IonImg src={product.img} />
               </IonThumbnail>
