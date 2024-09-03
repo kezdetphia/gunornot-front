@@ -1,11 +1,4 @@
-import {
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonItem,
-  IonRow,
-  IonText,
-} from "@ionic/react";
+import { IonCol, IonContent, IonGrid, IonRow, IonText } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/authContext";
 import UserAvatar from "../components/UserAvatar";
