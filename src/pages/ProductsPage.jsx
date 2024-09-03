@@ -1,7 +1,22 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
-import { IonSpinner } from "@ionic/react";
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonSpinner,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonButton,
+  IonText,
+  IonCardSubtitle,
+} from "@ionic/react";
+
 function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,66 +50,60 @@ function ProductsPage() {
 
   console.log("product", products[currentIndex]);
   return (
-    // <IonContent fullscreen={true} className="ion-padding">
-    <div>
-      {loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100px",
-            width: "100px",
-          }}
-        >
-          <IonSpinner />
-        </div>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          {products.length > 0 && currentIndex < products.length ? (
-            <div key={products[currentIndex]._id}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <h1>Encounters</h1>
-                {/* <div>
-                  <IonButton onClick={() => navigate("/app/profile")}>
-                    <IonIcon icon={menu} />
-                  </IonButton>
-                </div> */}
-              </div>
-              <ProductCard
-                product={products[currentIndex]}
-                onVote={handleVote}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                }}
-              ></div>
-            </div>
-          ) : (
-            <p>No more products to display.</p>
-          )}
-        </div>
-      )}
-    </div>
-    // </IonContent>
+    <IonPage>
+      <IonContent fullscreen className="ion-no-padding">
+        {loading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100px",
+              width: "100px",
+            }}
+          >
+            <IonSpinner />
+          </div>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {products.length > 0 && currentIndex < products.length ? (
+              <IonCard key={products[currentIndex]._id}>
+                <IonCardHeader>
+                  <IonCardTitle> {products[currentIndex].name}</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <ProductCard
+                    product={products[currentIndex]}
+                    onVote={handleVote}
+                  />
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginTop: "10px",
+                    }}
+                  >
+                    <IonCardSubtitle>
+                      {products[currentIndex].description}
+                    </IonCardSubtitle>
+                  </div>
+                </IonCardContent>
+              </IonCard>
+            ) : (
+              <p>No more products to display.</p>
+            )}
+          </div>
+        )}
+      </IonContent>
+    </IonPage>
   );
 }
 
