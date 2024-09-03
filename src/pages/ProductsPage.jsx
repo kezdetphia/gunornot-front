@@ -1,16 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
-import { IonSpinner } from "@ionic/react";
 import {
-  IonPage,
-  IonContent,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonCardSubtitle,
+  IonHeader,
+  IonItem,
+  IonList,
+  IonSpinner,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/react";
+import { IonPage, IonContent } from "@ionic/react";
+
+import "../components/ProductCard/ProductCard.css";
 
 function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -66,28 +67,11 @@ function ProductsPage() {
         <IonPage>
           <IonContent fullscreen className="ion-no-padding">
             {products.length > 0 && currentIndex < products.length ? (
-              <IonCard key={products[currentIndex]._id}>
-                <IonCardHeader>
-                  <IonCardTitle>{products[currentIndex].name}</IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  <ProductCard
-                    product={products[currentIndex]}
-                    onVote={handleVote}
-                  />
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      marginTop: "10px",
-                    }}
-                  >
-                    <IonCardSubtitle>
-                      {products[currentIndex].description}
-                    </IonCardSubtitle>
-                  </div>
-                </IonCardContent>
-              </IonCard>
+              <ProductCard
+                key={products[currentIndex]._id}
+                product={products[currentIndex]}
+                onVote={handleVote}
+              />
             ) : (
               <p>No more products to display.</p>
             )}

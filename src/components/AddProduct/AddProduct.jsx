@@ -8,10 +8,8 @@ import {
   IonInput,
   IonItem,
   IonList,
-  IonListHeader,
   IonLabel,
   IonTextarea,
-  IonThumbnail,
   IonGrid,
   IonRow,
   IonCol,
@@ -24,10 +22,6 @@ import {
 import axios from "axios";
 import heic2any from "heic2any";
 
-//TODO: Only allow 5 images to be uploaded
-// - Add a delete image button to the uploaded images
-// - When deleting the image, remove it from the uploadedImageUrls array and firebase!
-
 function AddProduct({ user, setUserInfo, setProductsUpdated }) {
   const [selectedImages, setSelectedImages] = useState([]);
   const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
@@ -35,6 +29,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [allImagesUploaded, setAllImagesUploaded] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null); // State to handle errors
   const fileInputRef = useRef(null); // Create ref for file input
 
   // Function to check form validity
@@ -51,7 +46,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
     validateForm();
   }, [selectedImages.length, formData, validateForm]);
 
-  const handleUpload = () => {
+  const handleUpload = useCallback(() => {
     setIsSubmitDisabled(true);
     // setLoading(true); // Show loading indicator
 
@@ -76,7 +71,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
           setLoading(false); // Hide loading indicator on error
         });
     }
-  };
+  }, [selectedImages, uploadedImageUrls, validateForm]);
 
   useEffect(() => {
     if (selectedImages.length > 0 && !allImagesUploaded) {
@@ -97,6 +92,14 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
     setLoading(true); // Start loader as soon as file selection begins
 
     const files = Array.from(e.target.files);
+    const totalFiles = selectedImages.length + files.length;
+
+    if (totalFiles > 5) {
+      setError("You can only upload a maximum of 5 images.");
+      setLoading(false);
+      return;
+    }
+
     const convertedFiles = await Promise.all(
       files.map(async (file) => {
         if (file.type === "image/heic") {
@@ -118,7 +121,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
     );
 
     const validFiles = convertedFiles.filter(Boolean);
-    setSelectedImages(validFiles);
+    setSelectedImages((prevImages) => [...prevImages, ...validFiles]);
     setAllImagesUploaded(false); // Reset flag until images are uploaded
 
     setLoading(false); // Hide loader after file processing is done
@@ -198,6 +201,11 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
                 ref={fileInputRef}
               />
             </IonItem>
+            {error && (
+              <IonItem>
+                <IonLabel color="danger">{error}</IonLabel>
+              </IonItem>
+            )}
           </IonList>
 
           <IonGrid className="ion-padding-top">
