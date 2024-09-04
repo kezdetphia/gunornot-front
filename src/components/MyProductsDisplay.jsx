@@ -9,8 +9,8 @@ import {
   IonText,
   IonThumbnail,
 } from "@ionic/react";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import api from "../services/authApiRequest"; // Import the api utility
 
 function MyProductsDisplay({ initialProducts, setProductsUpdated }) {
   const [myProducts, setMyProducts] = useState(initialProducts);
@@ -28,7 +28,7 @@ function MyProductsDisplay({ initialProducts, setProductsUpdated }) {
 
   const handleDeleteProduct = async (productId) => {
     try {
-      await axios.post("http://localhost:3001/product/deleteproduct", {
+      await api.post("/product/deleteproduct", {
         id: productId,
       });
       console.log("Product deleted");

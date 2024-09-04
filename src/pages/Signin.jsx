@@ -16,7 +16,7 @@ import {
 } from "@ionic/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { setToken, getToken } from "../services/StorageService";
+import { setToken, getToken } from "../services/storageService";
 import { useAuth } from "../context/authContext";
 
 function Signin() {
@@ -32,10 +32,13 @@ function Signin() {
     await present({ message: "Loading..." });
 
     try {
-      const response = await axios.post("http://localhost:3001/user/signin", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_BACKEND_URL}/user/signin`,
+        {
+          email,
+          password,
+        }
+      );
 
       if (response.status === 200) {
         await setToken("auth-token", response.data.token);

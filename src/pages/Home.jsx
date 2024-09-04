@@ -1,8 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
 import { IonSpinner } from "@ionic/react";
 import { IonPage, IonContent } from "@ionic/react";
+import api from "../services/authApiRequest"; // Import the api utility
 
 import "../components/ProductCard/ProductCard.css";
 
@@ -13,11 +13,10 @@ function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
+    setLoading(true);
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3001/product/getproducts?limit=10"
-        );
+        const response = await api.get("/product/getproducts?limit=10");
 
         console.log("fetch data");
         setProducts(response.data);
@@ -35,8 +34,6 @@ function Home() {
   const handleVote = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
   }, [products.length]);
-
-  console.log("product", products[currentIndex]);
 
   return (
     <>

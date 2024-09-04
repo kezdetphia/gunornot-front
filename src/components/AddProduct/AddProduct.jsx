@@ -16,8 +16,8 @@ import {
   IonCardTitle,
   IonCardContent,
 } from "@ionic/react";
-import axios from "axios";
 import useImageUpload from "../../hooks/useImageUpload";
+import api from "../../services/authApiRequest"; // Import the api utility
 
 function AddProduct({ user, setUserInfo, setProductsUpdated }) {
   const {
@@ -62,15 +62,12 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
   const handleSubmit = async () => {
     if (allImagesUploaded) {
       try {
-        const response = await axios.post(
-          "http://localhost:3001/product/addproduct",
-          {
-            name: formData.name,
-            img: uploadedImageUrls,
-            userId: user?._id,
-            description: formData.description,
-          }
-        );
+        const response = await api.post("/product/addproduct", {
+          name: formData.name,
+          img: uploadedImageUrls,
+          userId: user?._id,
+          description: formData.description,
+        });
 
         setUserInfo((prevUser) => ({
           ...prevUser,

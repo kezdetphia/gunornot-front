@@ -1,10 +1,10 @@
-import { IonCol, IonContent, IonGrid, IonRow, IonText } from "@ionic/react";
 import React, { useEffect, useState } from "react";
+import { IonCol, IonContent, IonGrid, IonRow, IonText } from "@ionic/react";
 import { useAuth } from "../context/authContext";
 import UserAvatar from "../components/UserAvatar";
-import axios from "axios";
 import MyProductsDisplay from "../components/MyProductsDisplay";
 import AddProduct from "../components/AddProduct/AddProduct";
+import api from "../services/authApiRequest"; // Import the api utility
 
 function Profile() {
   const { user, setUserInfo } = useAuth();
@@ -24,12 +24,9 @@ function Profile() {
       }
 
       try {
-        const response = await axios.post(
-          "http://localhost:3001/product/getmyproducts",
-          {
-            productIds: user.products,
-          }
-        );
+        const response = await api.post("/product/getmyproducts", {
+          productIds: user.products,
+        });
 
         const products = await response.data;
         console.log("Fetched products:", products); // Debug log

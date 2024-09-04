@@ -19,23 +19,59 @@ import axios from "axios";
 
 function Signup() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+
   const [alert] = useIonAlert();
   const [present, dismiss] = useIonLoading();
 
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    passwordRepeat: "",
+    username: "",
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Client-side validation
+    if (formData.username.length < 4) {
+      alert({
+        header: "Error",
+        message: "Username must be at least 4 characters long",
+        buttons: [{ text: "OK" }],
+      });
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      alert({
+        header: "Error",
+        message: "Password must be at least 6 characters long",
+        buttons: [{ text: "OK" }],
+      });
+      return;
+    }
+
+    if (formData.password !== formData.passwordRepeat) {
+      alert({
+        header: "Error",
+        message: "Passwords do not match",
+        buttons: [{ text: "OK" }],
+      });
+      return;
+    }
+
     await present({ message: "Loading..." });
 
     try {
-      const response = await axios.post("http://localhost:3001/user/signup", {
-        email,
-        password,
-        username,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_BACKEND_URL}/user/signup`,
+        {
+          formData,
+        }
+      );
 
+      console.log("response data", response.data);
       if (response.status === 200) {
         dismiss();
         alert({
@@ -48,18 +84,17 @@ function Signup() {
         dismiss();
         alert({
           header: "Error",
-          message:
-            response.data.message || "An error occurred. Please try again.",
+          message: response.data.msg || "An error occurred. Please try again.",
           buttons: [{ text: "OK" }],
         });
       }
     } catch (error) {
+      console.log("error", error);
       dismiss();
       alert({
         header: "Error",
         message:
-          error.response?.data?.message ||
-          "Invalid credentials. Please try again.",
+          error.response?.data?.msg || "Invalid credentials. Please try again.",
         buttons: [{ text: "OK" }],
       });
     }
@@ -80,8 +115,10 @@ function Signup() {
                 <IonLabel position="stacked">Username</IonLabel>
                 <IonInput
                   type="text"
-                  value={username}
-                  onIonChange={(e) => setUsername(e.detail.value)}
+                  value={formData.username}
+                  onIonChange={(e) =>
+                    setFormData({ ...formData, username: e.detail.value })
+                  }
                   required
                 />
               </IonItem>
@@ -89,8 +126,10 @@ function Signup() {
                 <IonLabel position="stacked">Email</IonLabel>
                 <IonInput
                   type="email"
-                  value={email}
-                  onIonChange={(e) => setEmail(e.detail.value)}
+                  value={formData.email}
+                  onIonChange={(e) =>
+                    setFormData({ ...formData, email: e.detail.value })
+                  }
                   required
                 />
               </IonItem>
@@ -99,8 +138,21 @@ function Signup() {
                 <IonLabel position="stacked">Password</IonLabel>
                 <IonInput
                   type="password"
-                  value={password}
-                  onIonChange={(e) => setPassword(e.detail.value)}
+                  value={formData.password}
+                  onIonChange={(e) =>
+                    setFormData({ ...formData, password: e.detail.value })
+                  }
+                  required
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Password</IonLabel>
+                <IonInput
+                  type="password"
+                  value={formData.passwordRepeat}
+                  onIonChange={(e) =>
+                    setFormData({ ...formData, passwordRepeat: e.detail.value })
+                  }
                   required
                 />
               </IonItem>
