@@ -3,7 +3,7 @@ import {
   createStorage,
   getToken,
   removeToken,
-} from "../services/StorageService";
+} from "../services/storageService";
 import axios from "axios";
 
 export const AuthContext = createContext();
@@ -21,11 +21,14 @@ export const AuthContextProvider = ({ children }) => {
         const token = await getToken("auth-token");
 
         if (token) {
-          const res = await axios.get("http://localhost:3001/user/me", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const res = await axios.get(
+            `${process.env.REACT_APP_BASE_BACKEND_URL}/user/me`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           if (res.status === 200) {
             setUser(res.data);
             setIsAuthenticated(true);
