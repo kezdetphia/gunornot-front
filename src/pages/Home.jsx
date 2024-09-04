@@ -1,19 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
-import {
-  IonHeader,
-  IonItem,
-  IonList,
-  IonSpinner,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonSpinner } from "@ionic/react";
 import { IonPage, IonContent } from "@ionic/react";
 
 import "../components/ProductCard/ProductCard.css";
 
-function ProductsPage() {
+function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -82,4 +75,4 @@ function ProductsPage() {
   );
 }
 
-export default ProductsPage;
+export default Home;

@@ -8,6 +8,11 @@ import {
   IonButton,
   useIonAlert,
   useIonLoading,
+  IonContent,
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
 } from "@ionic/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -22,10 +27,7 @@ function Signin() {
   const [alert] = useIonAlert();
   const [present, dismiss] = useIonLoading();
 
-  console.log("signin trigger");
-
   const handleSubmit = async (e) => {
-    console.log("handleSubmit trigger");
     e.preventDefault();
     await present({ message: "Loading..." });
 
@@ -36,22 +38,18 @@ function Signin() {
       });
 
       if (response.status === 200) {
-        console.log("Response Data:", response.data);
         await setToken("auth-token", response.data.token);
-
         const storedToken = await getToken("auth-token");
-        console.log("Stored Token after setToken:", storedToken);
 
         if (storedToken === response.data.token) {
           setUserInfo(response.data.userData);
-          console.log("User Info after signin:", response.data.userData);
           dismiss();
           alert({
             header: "Success",
             message: "You have successfully signed in",
             buttons: [{ text: "OK" }],
           });
-          navigate("/app/products");
+          navigate("/app/home");
         } else {
           throw new Error("Token was not stored correctly");
         }
@@ -74,35 +72,55 @@ function Signin() {
   };
 
   return (
-    <IonCard>
-      <IonCardContent>
-        <form onSubmit={handleSubmit}>
-          <IonItem>
-            <IonLabel position="stacked">Email</IonLabel>
-            <IonInput
-              type="email"
-              value={email}
-              onIonChange={(e) => setEmail(e.detail.value)}
-            ></IonInput>
-          </IonItem>
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Sign In</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className="ion-padding">
+        <IonCard>
+          <IonCardContent>
+            <form onSubmit={handleSubmit}>
+              <IonItem>
+                <IonLabel position="stacked">Email</IonLabel>
+                <IonInput
+                  type="email"
+                  value={email}
+                  onIonChange={(e) => setEmail(e.detail.value)}
+                  required
+                />
+              </IonItem>
 
-          <IonItem>
-            <IonLabel position="stacked">Password</IonLabel>
-            <IonInput
-              type="password"
-              value={password}
-              onIonChange={(e) => setPassword(e.detail.value)}
-            ></IonInput>
-          </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Password</IonLabel>
+                <IonInput
+                  type="password"
+                  value={password}
+                  onIonChange={(e) => setPassword(e.detail.value)}
+                  required
+                />
+              </IonItem>
 
-          <div className="ion-margin-top">
-            <IonButton expand="full" type="submit" color="secondary">
-              Sign In
-            </IonButton>
-          </div>
-        </form>
-      </IonCardContent>
-    </IonCard>
+              <IonButton
+                className="ion-margin-top"
+                expand="full"
+                type="submit"
+                color="secondary"
+              >
+                Sign In
+              </IonButton>
+            </form>
+            <div className="ion-text-center ion-margin-top">
+              <p>Don't have an account yet?</p>
+              <IonButton expand="block" fill="clear" routerLink="/signup">
+                Register
+              </IonButton>
+            </div>
+          </IonCardContent>
+        </IonCard>
+      </IonContent>
+    </IonPage>
   );
 }
 
