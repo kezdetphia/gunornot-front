@@ -13,7 +13,7 @@ import { IonPage, IonContent } from "@ionic/react";
 
 import "../components/ProductCard/ProductCard.css";
 
-function ProductsPage() {
+function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -82,4 +82,4 @@ function ProductsPage() {
   );
 }
 
-export default ProductsPage;
+export default Home;

@@ -5,7 +5,7 @@ import App from "./App";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Dashboard from "./pages/Dashboard";
-import ProductsPage from "./pages/ProductsPage";
+import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -21,9 +21,7 @@ const Main = () => {
       <Routes>
         <Route
           path="/"
-          element={
-            <Navigate to={isAuthenticated ? "/app/products" : "/signin"} />
-          }
+          element={<Navigate to={isAuthenticated ? "/app/home" : "/signin"} />}
         />
         <Route element={<PublicRoute />}>
           <Route path="/signin" element={<Signin />} />
@@ -31,7 +29,7 @@ const Main = () => {
         </Route>
         <Route path="/app/*" element={<ProtectedRoute />}>
           <Route element={<Layout />}>
-            <Route path="products" element={<ProductsPage />} />
+            <Route path="home" element={<Home />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="profile" element={<Profile />} />
           </Route>

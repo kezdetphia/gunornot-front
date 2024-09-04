@@ -51,7 +51,7 @@ function Signin() {
             message: "You have successfully signed in",
             buttons: [{ text: "OK" }],
           });
-          navigate("/app/products");
+          navigate("/app/home");
         } else {
           throw new Error("Token was not stored correctly");
         }

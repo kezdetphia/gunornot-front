@@ -21,7 +21,7 @@ const PublicRoute = () => {
     );
   }
 
-  return isAuthenticated ? <Navigate to="/app/products" /> : <Outlet />;
+  return isAuthenticated ? <Navigate to="/app/home" /> : <Outlet />;
 };
 
 export default PublicRoute;

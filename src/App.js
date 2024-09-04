@@ -53,7 +53,9 @@ function App() {
           <IonButton onClick={handleSignOut}>Sign Out</IonButton>
         </IonContent>
         <IonContent className="ion-padding">
-          <IonButton onClick={() => navigate("/app/profile")}>Profil</IonButton>
+          <IonButton onClick={() => navigate("/app/profile")}>
+            Profile
+          </IonButton>
         </IonContent>
       </IonMenu>
       <IonPage id="main-content">
