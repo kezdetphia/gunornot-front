@@ -8,6 +8,11 @@ import {
   IonButton,
   useIonAlert,
   useIonLoading,
+  IonContent,
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
 } from "@ionic/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -17,6 +22,8 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [alert] = useIonAlert();
+  const [present, dismiss] = useIonLoading();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,47 +65,66 @@ function Signup() {
     }
   };
 
-  const [alert] = useIonAlert();
-  const [present, dismiss] = useIonLoading();
-
   return (
-    <IonCard>
-      <IonCardContent>
-        <form onSubmit={handleSubmit}>
-          <IonItem>
-            <IonLabel position="stacked">Username</IonLabel>
-            <IonInput
-              type="username"
-              value={username}
-              onIonChange={(e) => setUsername(e.detail.value)}
-            ></IonInput>
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Email</IonLabel>
-            <IonInput
-              type="email"
-              value={email}
-              onIonChange={(e) => setEmail(e.detail.value)}
-            ></IonInput>
-          </IonItem>
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Sign Up</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className="ion-padding">
+        <IonCard>
+          <IonCardContent>
+            <form onSubmit={handleSubmit}>
+              <IonItem>
+                <IonLabel position="stacked">Username</IonLabel>
+                <IonInput
+                  type="text"
+                  value={username}
+                  onIonChange={(e) => setUsername(e.detail.value)}
+                  required
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Email</IonLabel>
+                <IonInput
+                  type="email"
+                  value={email}
+                  onIonChange={(e) => setEmail(e.detail.value)}
+                  required
+                />
+              </IonItem>
 
-          <IonItem>
-            <IonLabel position="stacked">Password</IonLabel>
-            <IonInput
-              type="password"
-              value={password}
-              onIonChange={(e) => setPassword(e.detail.value)}
-            ></IonInput>
-          </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Password</IonLabel>
+                <IonInput
+                  type="password"
+                  value={password}
+                  onIonChange={(e) => setPassword(e.detail.value)}
+                  required
+                />
+              </IonItem>
 
-          <div className="ion-margin-top">
-            <IonButton expand="full" type="submit" color="secondary">
-              SIGN UP
-            </IonButton>
-          </div>
-        </form>
-      </IonCardContent>
-    </IonCard>
+              <IonButton
+                className="ion-margin-top"
+                expand="full"
+                type="submit"
+                color="secondary"
+              >
+                SIGN UP
+              </IonButton>
+            </form>
+            <div className="ion-text-center ion-margin-top">
+              <p>Have an account already?</p>
+              <IonButton expand="block" fill="clear" routerLink="/signin">
+                Sign In
+              </IonButton>
+            </div>
+          </IonCardContent>
+        </IonCard>
+      </IonContent>
+    </IonPage>
   );
 }
+
 export default Signup;
