@@ -1,6 +1,6 @@
 .card-container {
   /* background-color: rgb(242, 238, 238); */
-  background-color: black;
+  background-color: rgb(205, 204, 204);
   position: relative;
   display: flex;
   flex-direction: column;

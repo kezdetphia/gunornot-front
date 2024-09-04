@@ -15,7 +15,6 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  setupIonicReact,
 } from "@ionic/react";
 
 function App() {

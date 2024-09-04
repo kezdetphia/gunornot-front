@@ -101,6 +101,12 @@ function Signin() {
             </IonButton>
           </div>
         </form>
+        <div className="ion-text-center ion-margin-top">
+          <p>Don't have an account yet?</p>
+          <IonButton expand="block" fill="clear" routerLink="/signup">
+            Register
+          </IonButton>
+        </div>
       </IonCardContent>
     </IonCard>
   );
