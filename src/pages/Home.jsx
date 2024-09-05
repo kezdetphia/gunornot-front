@@ -1,10 +1,20 @@
 import React, { useEffect, useState, useCallback } from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
-import { IonSpinner } from "@ionic/react";
+import {
+  IonHeader,
+  IonSpinner,
+  IonToolbar,
+  IonTitle,
+  IonButton,
+  IonIcon,
+} from "@ionic/react";
 import { IonPage, IonContent } from "@ionic/react";
 import api from "../services/authApiRequest"; // Import the api utility
 
 import "../components/ProductCard/ProductCard.css";
+import { heart } from "ionicons/icons";
+import ProfileCard from "../components/SwipeComponents/ProfileCard";
+import "../components/SwipeComponents/Home.css";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -55,18 +65,34 @@ function Home() {
         <p>{error}</p>
       ) : (
         <IonPage>
-          <IonContent fullscreen className="ion-no-padding">
-            {products.length > 0 && currentIndex < products.length ? (
-              <ProductCard
-                key={products[currentIndex]._id}
-                product={products[currentIndex]}
-                onVote={handleVote}
-              />
-            ) : (
-              <p>No more products to display.</p>
-            )}
+          <IonContent fullscreen>
+            <div className="cards-stack-container">
+              {products.map((profile, index) => (
+                <ProfileCard
+                  {...profile}
+                  key={profile._id}
+                  // profile={profile}
+                />
+              ))}
+              {/* <IonButton>
+                <IonIcon icon={heart} />
+              </IonButton> */}
+            </div>
           </IonContent>
         </IonPage>
+        // <IonPage>
+        //   <IonContent fullscreen className="ion-no-padding">
+        //     {products.length > 0 && currentIndex < products.length ? (
+        //       <ProductCard
+        //         key={products[currentIndex]._id}
+        //         product={products[currentIndex]}
+        //         onVote={handleVote}
+        //       />
+        //     ) : (
+        //       <p>No more products to display.</p>
+        //     )}
+        //   </IonContent>
+        // </IonPage>
       )}
     </>
   );

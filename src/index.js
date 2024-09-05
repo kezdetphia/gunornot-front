@@ -22,6 +22,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import PublicRoute from "./utils/PublicRoute";
 import Layout from "./components/Layout";
+import ProfileCard from "./components/SwipeComponents/ProfileCard";
 import { AuthContextProvider, useAuth } from "./context/authContext";
 import "./index.css";
 // Theme variables
@@ -52,7 +53,7 @@ const Main = () => {
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
-        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
