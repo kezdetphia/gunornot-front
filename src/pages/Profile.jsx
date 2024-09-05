@@ -5,6 +5,7 @@ import UserAvatar from "../components/UserAvatar";
 import MyProductsDisplay from "../components/MyProductsDisplay";
 import AddProduct from "../components/AddProduct/AddProduct";
 import api from "../services/authApiRequest"; // Import the api utility
+import StarRating from "../components/StarRating";
 
 function Profile() {
   const { user, setUserInfo } = useAuth();
