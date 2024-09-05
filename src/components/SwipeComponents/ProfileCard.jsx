@@ -65,7 +65,7 @@ const ProfileCard = (props) => {
       <IonCard>
         <div className="card-container">
           {props.img.map((img, index) => (
-            <div className="image-container">
+            <div className="image-container" key={props._id}>
               <IonImg key={index} src={img} />
             </div>
           ))}
