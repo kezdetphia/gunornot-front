@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  IonImg,
-  IonIcon,
-  IonButton,
-  IonCardSubtitle,
-  IonModal,
-  IonContent,
-  isPlatform,
-  IonItem,
-  IonText,
-} from "@ionic/react";
+import { IonImg, IonIcon, IonButton, IonText } from "@ionic/react";
 import { heart, close } from "ionicons/icons";
 import StarIcon from "../StarIcon";
 import useUpdateVotes from "../../hooks/useUpdateVotes";
@@ -37,13 +27,13 @@ const ProductCard = React.memo(({ product, onVote }) => {
     onVote(type, updatedProduct);
   };
 
-  const [showModal, setShowModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
+  // const [showModal, setShowModal] = useState(false);
+  // const [selectedImage, setSelectedImage] = useState("");
 
-  const handleImageClick = (imgUrl) => {
-    setSelectedImage(imgUrl);
-    setShowModal(true);
-  };
+  // const handleImageClick = (imgUrl) => {
+  //   setSelectedImage(imgUrl);
+  //   setShowModal(true);
+  // };
 
   return (
     <div className="card-container">
@@ -53,7 +43,7 @@ const ProductCard = React.memo(({ product, onVote }) => {
           src={product.img[0]}
           alt={product.name}
           className="main-image"
-          onClick={() => handleImageClick(product.img[0])}
+          // onClick={() => handleImageClick(product.img[0])}
         />
         <div className="icon-container">
           <IonButton
@@ -98,7 +88,7 @@ const ProductCard = React.memo(({ product, onVote }) => {
             src={imgUrl}
             alt={`${product.name}-${index}`}
             className="additional-image"
-            onClick={() => handleImageClick(imgUrl)}
+            // onClick={() => handleImageClick(imgUrl)}
           />
         ))}
       </div>
