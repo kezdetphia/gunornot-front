@@ -16,7 +16,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { setupIonicReact } from "@ionic/react";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
-import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
@@ -41,6 +40,7 @@ const Main = () => {
           path="/"
           element={<Navigate to={isAuthenticated ? "/app/home" : "/signin"} />}
         />
+        <Route path="*" element={<NotFound />} />
         <Route element={<PublicRoute />}>
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
@@ -48,11 +48,11 @@ const Main = () => {
         <Route path="/app/*" element={<ProtectedRoute />}>
           <Route element={<Layout />}>
             <Route path="home" element={<Home />} />
-            <Route path="dashboard" element={<Dashboard />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
-        <Route path="*" element={<NotFound />} />
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </BrowserRouter>
   );
