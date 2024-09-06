@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
 import { IonSpinner } from "@ionic/react";
 import { IonPage, IonContent } from "@ionic/react";
@@ -12,7 +12,7 @@ function Home() {
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  //Set the limit to 10 products for now, might implement a function later that will fetch more products as the user scrolls
+  // Set the limit to 10 products for now, might implement a function later that will fetch more products as the user scrolls
   useEffect(() => {
     setLoading(true);
     const fetchProducts = async () => {
@@ -32,9 +32,19 @@ function Home() {
     fetchProducts();
   }, []);
 
-  // const handleVote = useCallback(() => {
-  //   setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
-  // }, [products.length]);
+  const handleSwipe = useCallback(
+    (direction) => {
+      setCurrentIndex((prevIndex) => {
+        if (direction === "left") {
+          return (prevIndex + 1) % products.length;
+        } else if (direction === "right") {
+          return (prevIndex - 1 + products.length) % products.length;
+        }
+        return prevIndex;
+      });
+    },
+    [products.length]
+  );
 
   return (
     <>
@@ -61,7 +71,7 @@ function Home() {
               <ProductCard
                 key={products[currentIndex]._id}
                 product={products[currentIndex]}
-                // onVote={handleVote}
+                onSwipe={handleSwipe}
               />
             ) : (
               <p>No more products to display.</p>
