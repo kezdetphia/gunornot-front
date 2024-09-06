@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
 import { IonSpinner } from "@ionic/react";
 import { IonPage, IonContent } from "@ionic/react";
@@ -31,9 +31,9 @@ function Home() {
     fetchProducts();
   }, []);
 
-  const handleVote = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
-  }, [products.length]);
+  // const handleVote = useCallback(() => {
+  //   setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+  // }, [products.length]);
 
   return (
     <>
@@ -60,7 +60,7 @@ function Home() {
               <ProductCard
                 key={products[currentIndex]._id}
                 product={products[currentIndex]}
-                onVote={handleVote}
+                // onVote={handleVote}
               />
             ) : (
               <p>No more products to display.</p>

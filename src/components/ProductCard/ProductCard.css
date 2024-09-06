@@ -172,3 +172,48 @@
   object-fit: contain;
   margin: auto; /* center the image horizontally and vertically */
 }
+
+.rating-overlay {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* Add some spacing between stars */
+}
+
+.rating-number {
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+/* Add hover effect to all stars */
+ion-icon {
+  transition: color 0.3s ease-in-out; /* Smooth hover transition */
+}
+
+.star-range-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.stars-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.star-icon-container {
+  cursor: pointer;
+}
+
+.star-icon {
+  color: #ffd700;
+  font-size: 54px; /* Adjust the size of the stars */
+  padding: 0 5px;
+}
+
+.star-icon.filled {
+  color: #ffd700; /* Gold color for filled stars */
+  padding: 0 5px;
+  font-size: 54px;
+}
