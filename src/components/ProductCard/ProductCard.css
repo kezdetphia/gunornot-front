@@ -65,22 +65,6 @@
   font-size: 24px;
 }
 
-.close-icon {
-  color: black;
-  font-size: 40px;
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  padding: 10px;
-}
-
-.heart-icon {
-  color: red;
-  font-size: 40px;
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  padding: 10px;
-}
-
 .name-rating-container {
   display: flex;
   flex-direction: row;
@@ -100,16 +84,24 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.5
-  ); /* slightly transparent black background */
+  background-color: rgba(0, 0, 0, 0.5);
   padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.rating-overlay.hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+.rating-overlay.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
 }
 
 .rating-number {
@@ -185,12 +177,6 @@
   margin: auto; /* center the image horizontally and vertically */
 }
 
-.rating-overlay {
-  display: flex;
-  align-items: center;
-  gap: 4px; /* Add some spacing between stars */
-}
-
 .rating-number {
   margin-left: 10px;
   font-size: 14px;
@@ -220,12 +206,15 @@ ion-icon {
 
 .star-icon {
   color: #ffd700;
-  font-size: 54px; /* Adjust the size of the stars */
+  font-size: 34px; /* Adjust the size of the stars */
   padding: 0 5px;
+  /* Add these lines to fix the stars on iOS and Firefox on macOS */
+  -webkit-font-smoothing: antialias; /* Fix for iOS */
+  -moz-osx-font-smoothing: grayscale; /* Fix for Firefox on macOS */
 }
 
 .star-icon.filled {
   color: #ffd700; /* Gold color for filled stars */
   padding: 0 5px;
-  font-size: 54px;
+  font-size: 34px;
 }

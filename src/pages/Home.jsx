@@ -12,6 +12,7 @@ function Home() {
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  //Set the limit to 10 products for now, might implement a function later that will fetch more products as the user scrolls
   useEffect(() => {
     setLoading(true);
     const fetchProducts = async () => {
