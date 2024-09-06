@@ -12,12 +12,7 @@ function Profile() {
   const [myProducts, setMyProducts] = useState([]);
   const [productsUpdated, setProductsUpdated] = useState(false);
 
-  console.log("user", user);
-  console.log("productsUpdateddddddd", productsUpdated);
-
   useEffect(() => {
-    console.log("useEffect triggered with productsUpdated:", productsUpdated);
-
     const fetchMyProducts = async () => {
       if (!user?.products || user.products.length === 0) {
         console.log("No products found for user");
