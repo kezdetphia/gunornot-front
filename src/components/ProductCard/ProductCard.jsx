@@ -24,10 +24,13 @@ const ProductCard = React.memo(({ product }) => {
           alt={product.name}
           className="main-image"
         />
+        <div className="rating-overlay">
+          <StarRange starRating={starRating} onIonChange={handleRangeChange} />
+        </div>
       </div>
 
       {/* Description */}
-      <IonText className="description">{product.description}</IonText>
+      {/* <IonText className="description">{product.description}</IonText> */}
 
       {/* Additional Images */}
       <div className="additional-images">
@@ -41,7 +44,6 @@ const ProductCard = React.memo(({ product }) => {
         ))}
       </div>
 
-      <StarRange starRating={starRating} onIonChange={handleRangeChange} />
       <p>Average Rating: {rating.toFixed(1)}</p>
       <p>Selected Value: {starRating.toFixed(1)}</p>
     </div>

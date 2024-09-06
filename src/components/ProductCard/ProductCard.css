@@ -96,7 +96,19 @@
 }
 
 .rating-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* slightly transparent black background */
+  padding: 10px;
   display: flex;
+  justify-content: center;
   align-items: center;
 }
 
