@@ -19,6 +19,8 @@ import {
 import useImageUpload from "../../hooks/useImageUpload";
 import api from "../../services/authApiRequest"; // Import the api utility
 
+//TODO: Handle deleting images from firebase when user deletes the product
+
 function AddProduct({ user, setUserInfo, setProductsUpdated }) {
   const {
     selectedImages,

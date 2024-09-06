@@ -5,7 +5,9 @@ import useUpdateVotes from "../../hooks/useUpdateVotes";
 import "./ProductCard.css";
 import StarIcon from "../StarIcon";
 
-const ProductCard = React.memo(({ product, onSwipe }) => {
+//TODO: Implement a modal that would open the image in real size
+
+const ProductCard = React.memo(({ product, onSwipe, style }) => {
   const [starRating, setStarRating] = useState(0);
   const [allowUserToRate, setAllowUserToRate] = useState(true);
   const cardRef = useRef(null);
@@ -56,7 +58,7 @@ const ProductCard = React.memo(({ product, onSwipe }) => {
   };
 
   return (
-    <div className="card-container" ref={cardRef}>
+    <div className="card-container" ref={cardRef} style={style}>
       {/* Main Image */}
       <div className="main-image-container">
         <IonImg

@@ -1,66 +1,71 @@
-.card-container {
-  /* background-color: rgb(242, 238, 238); */
-  background-color: rgb(205, 204, 204);
+.card-stack {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  height: auto; /* Allow the height to adjust based on content */
-  overflow: hidden; /* Remove internal scrolling */
-  padding: 4px; /* Add padding around the entire content */
-  margin: 0; /* Remove margin */
-  box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
+  width: 100%;
+  height: 100%;
+}
+
+.card-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .main-image-container {
   position: relative;
   width: 100%;
-  height: calc(
-    100vh - 56px - 32px
-  ); /* Adjust for the menu bar height and padding */
-  padding: 0; /* Remove padding */
-  margin: 0; /* Remove margin */
-  box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
+  height: 100%;
 }
 
 .main-image {
-  object-fit: cover; /* Cover the entire container */
+  object-fit: cover;
   width: 100%;
   height: 100%;
-  border-radius: 15px; /* Add border-radius for rounded corners */
+  border-radius: 15px;
 }
 
-.overlay {
+.rating-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
   padding: 10px;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
-.icon-container {
-  position: absolute;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
+.rating-overlay.hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
 }
 
-.icon-button {
-  --background: transparent;
-  --background-activated: rgba(0, 0, 0, 0.1);
+.rating-overlay.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
 }
 
+.additional-images {
+  width: 100%;
+  margin-top: 5px;
+}
+
+.additional-image {
+  object-fit: contain;
+  width: 100%;
+  height: auto;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+  .main-image-container {
+    height: calc(100vh - 135px);
+  }
+}
 .icon {
   font-size: 24px;
 }

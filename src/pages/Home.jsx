@@ -67,15 +67,24 @@ function Home() {
       ) : (
         <IonPage>
           <IonContent fullscreen className="ion-no-padding">
-            {products.length > 0 && currentIndex < products.length ? (
-              <ProductCard
-                key={products[currentIndex]._id}
-                product={products[currentIndex]}
-                onSwipe={handleSwipe}
-              />
-            ) : (
-              <p>No more products to display.</p>
-            )}
+            <div className="card-stack">
+              {products.length > 0 && currentIndex < products.length ? (
+                <>
+                  {products
+                    .slice(currentIndex, currentIndex + 2)
+                    .map((product, index) => (
+                      <ProductCard
+                        key={product._id}
+                        product={product}
+                        onSwipe={handleSwipe}
+                        style={{ zIndex: products.length - index }}
+                      />
+                    ))}
+                </>
+              ) : (
+                <p>No more products to display.</p>
+              )}
+            </div>
           </IonContent>
         </IonPage>
       )}
