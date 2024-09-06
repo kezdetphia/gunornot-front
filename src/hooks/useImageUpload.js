@@ -5,24 +5,28 @@ import { v4 as uuidv4 } from "uuid";
 import heic2any from "heic2any";
 
 const useImageUpload = () => {
+  // State variables for managing image upload process
   const [selectedImages, setSelectedImages] = useState([]);
   const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [allImagesUploaded, setAllImagesUploaded] = useState(false);
 
+  // Handle file selection and conversion
   const handleFileChange = async (e) => {
     setLoading(true); // Start loader as soon as file selection begins
 
     const files = Array.from(e.target.files);
     const totalFiles = selectedImages.length + files.length;
 
+    // Check if total number of files exceeds the limit
     if (totalFiles > 5) {
       setError("You can only upload a maximum of 5 images.");
       setLoading(false);
       return;
     }
 
+    // Convert HEIC files to JPEG if necessary
     const convertedFiles = await Promise.all(
       files.map(async (file) => {
         if (file.type === "image/heic") {
@@ -50,6 +54,7 @@ const useImageUpload = () => {
     setLoading(false); // Hide loader after file processing is done
   };
 
+  // Handle image upload to Firebase Storage
   const handleUpload = useCallback(() => {
     setLoading(true); // Show loading indicator
 
@@ -75,12 +80,14 @@ const useImageUpload = () => {
     }
   }, [selectedImages, uploadedImageUrls]);
 
+  // Trigger upload when new images are selected
   useEffect(() => {
     if (selectedImages.length > 0 && !allImagesUploaded) {
       handleUpload();
     }
   }, [selectedImages, allImagesUploaded, handleUpload]);
 
+  // Return values and functions for use in components
   return {
     selectedImages,
     uploadedImageUrls,

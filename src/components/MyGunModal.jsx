@@ -12,6 +12,8 @@ import {
   IonTextarea,
 } from "@ionic/react";
 
+//THIS COMPONENT IS CURRENTLY NOT USED, the intention was to edit the product in the AddProduct component
+
 function MyGunModal({ product, isOpen, onClose, onSave }) {
   const [formData, setFormData] = useState({
     name: "",

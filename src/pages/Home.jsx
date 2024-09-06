@@ -1,24 +1,25 @@
 import React, { useEffect, useState, useCallback } from "react";
 import ProductCard from "../components/ProductCard/ProductCard";
-import { IonSpinner } from "@ionic/react";
-import { IonPage, IonContent } from "@ionic/react";
-import api from "../services/authApiRequest"; // Import the api utility
+import { IonSpinner, IonPage, IonContent } from "@ionic/react";
+import api from "../services/authApiRequest"; // Import the api utility for making authenticated requests
 
 import "../components/ProductCard/ProductCard.css";
 
+// TODO: if userId from useAuth is the same as the product.userId, then the product should not be displayed
 function Home() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // State variables
+  const [products, setProducts] = useState([]); // Stores the list of products
+  const [loading, setLoading] = useState(true); // Indicates whether data is being fetched
+  const [error, setError] = useState(null); // Stores any error messages
+  const [currentIndex, setCurrentIndex] = useState(0); // Tracks the index of the current product being displayed
 
-  // Set the limit to 10 products for now, might implement a function later that will fetch more products as the user scrolls
+  // Fetch products when the component mounts
   useEffect(() => {
     setLoading(true);
     const fetchProducts = async () => {
       try {
+        // Fetch 10 products from the API
         const response = await api.get("/product/getproducts?limit=10");
-
         console.log("fetch data");
         setProducts(response.data);
         setLoading(false);
@@ -32,12 +33,15 @@ function Home() {
     fetchProducts();
   }, []);
 
+  // Handle swipe gestures on product cards
   const handleSwipe = useCallback(
     (direction) => {
       setCurrentIndex((prevIndex) => {
         if (direction === "left") {
+          // Move to the next product (circular)
           return (prevIndex + 1) % products.length;
         } else if (direction === "right") {
+          // Move to the previous product (circular)
           return (prevIndex - 1 + products.length) % products.length;
         }
         return prevIndex;
@@ -49,6 +53,7 @@ function Home() {
   return (
     <>
       {loading ? (
+        // Display a loading spinner while fetching data
         <div
           style={{
             position: "absolute",
@@ -63,13 +68,16 @@ function Home() {
           <IonSpinner />
         </div>
       ) : error ? (
+        // Display error message if fetching fails
         <p>{error}</p>
       ) : (
+        // Display product cards when data is loaded
         <IonPage>
           <IonContent fullscreen className="ion-no-padding">
             <div className="card-stack">
               {products.length > 0 && currentIndex < products.length ? (
                 <>
+                  {/* Display up to two product cards at a time */}
                   {products
                     .slice(currentIndex, currentIndex + 2)
                     .map((product, index) => (
@@ -82,6 +90,7 @@ function Home() {
                     ))}
                 </>
               ) : (
+                // Display message when no more products are available
                 <p>No more products to display.</p>
               )}
             </div>
