@@ -96,49 +96,51 @@ REACT_APP_BASE_BACKEND_URL=<your-backend-url>
 
 Replace `<your-backend-url>` with the URL of your backend server.
 
-## Firebase Configuration
+## Getting Firebase Config Properties
 
-The app uses Firebase for storage. You need to set up Firebase configuration in the `src/firebase/firebaseConfig.js` file. Here is an example of what the configuration file looks like:
+The app uses Firebase for storage. You need to set up Firebase configuration in the `src/firebase/firebaseConfig.js` file.
 
-Import the functions you need from the SDKs you need
-
-import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
-// TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-STEPS:
-Go to the Firebase website and log in to your Google account. https://firebase.google.com/
+To get the Firebase configuration properties for your project, follow these steps:
 
-In the top right corner, click on "Go to Console".
+1. **Go to the Firebase Console**:
 
-Click "Create a Project".
+   - Open your web browser and navigate to the [Firebase Console](https://console.firebase.google.com).
 
-Add a project name and follow the steps to complete the setup.
+2. **Sign In**:
 
-Once your project is created, select the Web option (</>) to add Firebase to your app.
+   - Sign in with your Google account. If you don't have an account, you can create one.
 
-Enter an App name and click "Register App".
+3. **Select Your Project**:
 
-If Firebase is not yet installed, run:
+   - If you already have a Firebase project, select it from the list. If not, you can create a new project by clicking on the "Add project" button and following the setup instructions.
 
-// Your web app's Firebase configuration:
-@npm install firebase
-(If you already ran npm install earlier, you can skip this step.)
+4. **Navigate to Project Settings**:
 
-Copy the provided Firebase configuration code to initialize Firebase, and replace it in your project as necessary. This will look something like:
+   - Once your project is selected, click on the gear icon (⚙️) next to "Project Overview" in the left sidebar.
+   - Select "Project settings" from the dropdown menu.
 
-const firebaseConfig = {
-apiKey: "YOUR_API_KEY",
-authDomain: "YOUR_AUTH_DOMAIN",
-projectId: "YOUR_PROJECT_ID",
-storageBucket: "YOUR_STORAGE_BUCKET",
-messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-appId: "YOUR_APP_ID",
-};
+5. **Get the Firebase Config Object**:
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const imageDb = getStorage(app);
+   - In the "General" tab of the Project settings, scroll down to the "Your apps" section.
+   - If you haven't added an app yet, click on the "Add app" button and follow the instructions to register your app (e.g., Web, iOS, Android).
+   - After adding your app, you will see a section titled "Firebase SDK snippet". Click on the "Config" radio button to view the configuration object.
 
-Replace the placeholder values (`YOUR_API_KEY`, `YOUR_AUTH_DOMAIN`, etc.) with your actual Firebase project configuration values. You can find these values in your Firebase project settings.
+6. **Copy the Config Object**:
+
+   - The configuration object will look something like this:
+     ```javascript
+     const firebaseConfig = {
+       apiKey: "YOUR_API_KEY",
+       authDomain: "YOUR_AUTH_DOMAIN",
+       projectId: "YOUR_PROJECT_ID",
+       storageBucket: "YOUR_STORAGE_BUCKET",
+       messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+       appId: "YOUR_APP_ID",
+     };
+     ```
+   - Copy this configuration object.
+
+7. **Use the Config Object in Your Project**:
+   - Paste the copied configuration object into your project's Firebase initialization file (e.g., `firebaseConfig.js`).
