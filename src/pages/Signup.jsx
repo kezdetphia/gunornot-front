@@ -17,12 +17,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function Signup() {
+const Signup = () => {
   const navigate = useNavigate();
 
+  // Hooks for displaying alerts and loading indicators
   const [alert] = useIonAlert();
   const [present, dismiss] = useIonLoading();
 
+  // State to hold form data
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -30,6 +32,7 @@ function Signup() {
     username: "",
   });
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -61,9 +64,11 @@ function Signup() {
       return;
     }
 
+    // Show loading indicator
     await present({ message: "Loading..." });
 
     try {
+      // Send sign-up request to the backend
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_BACKEND_URL}/user/signup`,
         {
@@ -73,15 +78,20 @@ function Signup() {
 
       console.log("response data", response.data);
       if (response.status === 200) {
+        // Hide loading indicator
         dismiss();
+        // Show success alert
         alert({
           header: "Success",
           message: "You have successfully signed up",
           buttons: [{ text: "OK" }],
         });
+        // Navigate to sign-in page
         navigate("/signin");
       } else {
+        // Hide loading indicator
         dismiss();
+        // Show error alert
         alert({
           header: "Error",
           message: response.data.msg || "An error occurred. Please try again.",
@@ -90,7 +100,9 @@ function Signup() {
       }
     } catch (error) {
       console.log("error", error);
+      // Hide loading indicator
       dismiss();
+      // Show error alert
       alert({
         header: "Error",
         message:
@@ -100,6 +112,7 @@ function Signup() {
     }
   };
 
+  // Render sign-up form
   return (
     <IonPage>
       <IonHeader>
@@ -111,6 +124,7 @@ function Signup() {
         <IonCard>
           <IonCardContent>
             <form onSubmit={handleSubmit}>
+              {/* Username input field */}
               <IonItem>
                 <IonLabel position="stacked">Username</IonLabel>
                 <IonInput
@@ -122,6 +136,7 @@ function Signup() {
                   required
                 />
               </IonItem>
+              {/* Email input field */}
               <IonItem>
                 <IonLabel position="stacked">Email</IonLabel>
                 <IonInput
@@ -134,6 +149,7 @@ function Signup() {
                 />
               </IonItem>
 
+              {/* Password input field */}
               <IonItem>
                 <IonLabel position="stacked">Password</IonLabel>
                 <IonInput
@@ -145,8 +161,9 @@ function Signup() {
                   required
                 />
               </IonItem>
+              {/* Password repeat input field */}
               <IonItem>
-                <IonLabel position="stacked">Password</IonLabel>
+                <IonLabel position="stacked">Repeat Password</IonLabel>
                 <IonInput
                   type="password"
                   value={formData.passwordRepeat}
@@ -157,6 +174,7 @@ function Signup() {
                 />
               </IonItem>
 
+              {/* Submit button */}
               <IonButton
                 className="ion-margin-top"
                 expand="full"
@@ -166,6 +184,7 @@ function Signup() {
                 SIGN UP
               </IonButton>
             </form>
+            {/* Link to sign-in page */}
             <div className="ion-text-center ion-margin-top">
               <p>Have an account already?</p>
               <IonButton expand="block" fill="clear" routerLink="/signin">
@@ -177,6 +196,6 @@ function Signup() {
       </IonContent>
     </IonPage>
   );
-}
+};
 
 export default Signup;

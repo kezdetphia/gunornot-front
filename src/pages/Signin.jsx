@@ -19,19 +19,23 @@ import axios from "axios";
 import { setToken, getToken } from "../services/storageService";
 import { useAuth } from "../context/authContext";
 
-function Signin() {
+const Signin = () => {
   const navigate = useNavigate();
   const { setUserInfo } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // Hooks for displaying alerts and loading indicators
   const [alert] = useIonAlert();
   const [present, dismiss] = useIonLoading();
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     await present({ message: "Loading..." });
 
     try {
+      // Send sign-in request to the backend
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_BACKEND_URL}/user/signin`,
         {
@@ -41,17 +45,21 @@ function Signin() {
       );
 
       if (response.status === 200) {
+        // Store the authentication token
         await setToken("auth-token", response.data.token);
         const storedToken = await getToken("auth-token");
 
         if (storedToken === response.data.token) {
+          // Update user info in the global state
           setUserInfo(response.data.userData);
           dismiss();
+          // Show success alert
           alert({
             header: "Success",
             message: "You have successfully signed in",
             buttons: [{ text: "OK" }],
           });
+          // Navigate to home page
           navigate("/app/home");
         } else {
           throw new Error("Token was not stored correctly");
@@ -64,6 +72,7 @@ function Signin() {
     } catch (error) {
       console.error("Sign-in Error:", error);
       dismiss();
+      // Show error alert
       alert({
         header: "Error",
         message:
@@ -85,6 +94,7 @@ function Signin() {
         <IonCard>
           <IonCardContent>
             <form onSubmit={handleSubmit}>
+              {/* Email input field */}
               <IonItem>
                 <IonLabel position="stacked">Email</IonLabel>
                 <IonInput
@@ -95,6 +105,7 @@ function Signin() {
                 />
               </IonItem>
 
+              {/* Password input field */}
               <IonItem>
                 <IonLabel position="stacked">Password</IonLabel>
                 <IonInput
@@ -105,6 +116,7 @@ function Signin() {
                 />
               </IonItem>
 
+              {/* Submit button */}
               <IonButton
                 className="ion-margin-top"
                 expand="full"
@@ -114,6 +126,7 @@ function Signin() {
                 Sign In
               </IonButton>
             </form>
+            {/* Link to registration page */}
             <div className="ion-text-center ion-margin-top">
               <p>Don't have an account yet?</p>
               <IonButton expand="block" fill="clear" routerLink="/signup">
@@ -125,6 +138,6 @@ function Signin() {
       </IonContent>
     </IonPage>
   );
-}
+};
 
 export default Signin;

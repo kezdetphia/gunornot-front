@@ -17,7 +17,9 @@ import {
   IonCardContent,
 } from "@ionic/react";
 import useImageUpload from "../../hooks/useImageUpload";
-import api from "../../services/authApiRequest"; // Import the api utility
+import api from "../../services/authApiRequest";
+
+//TODO: Handle deleting images from firebase when user deletes the product
 
 function AddProduct({ user, setUserInfo, setProductsUpdated }) {
   const {
@@ -27,16 +29,17 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
     error,
     handleFileChange,
     allImagesUploaded,
-    setUploadedImageUrls, // Destructure the state setter
-    setSelectedImages, // Destructure the state setter
-    setAllImagesUploaded, // Destructure the state setter
+    setUploadedImageUrls,
+    setSelectedImages,
+    setAllImagesUploaded,
   } = useImageUpload();
 
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  const fileInputRef = useRef(null); // Create ref for file input
 
-  // Function to check form validity
+  const fileInputRef = useRef(null);
+
+  // Function to validate form data
   const validateForm = useCallback(() => {
     const isFormValid =
       selectedImages.length > 0 &&
@@ -45,11 +48,12 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
     setIsSubmitDisabled(!isFormValid);
   }, [selectedImages.length, formData.name, formData.description]);
 
-  // Enable submit button when conditions are met
+  // Effect to validate form when relevant data changes
   useEffect(() => {
     validateForm();
   }, [selectedImages.length, formData, validateForm]);
 
+  // Handler for input changes in the form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => {
@@ -59,9 +63,11 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
     });
   };
 
+  // Handler for form submission
   const handleSubmit = async () => {
     if (allImagesUploaded) {
       try {
+        // Send POST request to add new product
         const response = await api.post("/product/addproduct", {
           name: formData.name,
           img: uploadedImageUrls,
@@ -69,16 +75,19 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
           description: formData.description,
         });
 
+        // Update user info with new product
         setUserInfo((prevUser) => ({
           ...prevUser,
           products: [...prevUser.products, response.data._id],
         }));
+        // Trigger products update in parent component
         setProductsUpdated((prevState) => !prevState);
 
+        // Reset form and related states
         setFormData({ name: "", description: "" });
         setUploadedImageUrls([]);
         setSelectedImages([]);
-        setAllImagesUploaded(false); // Reset flag after successful submit
+        setAllImagesUploaded(false);
 
         // Reset file input
         if (fileInputRef.current) {
@@ -101,6 +110,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
         </IonCardHeader>
         <IonCardContent>
           <IonList className="ion-padding-top">
+            {/* Product name input */}
             <IonItem>
               <IonInput
                 name="name"
@@ -112,6 +122,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
                 maxLength={12}
               />
             </IonItem>
+            {/* Product description input */}
             <IonItem>
               <IonTextarea
                 name="description"
@@ -122,6 +133,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
                 placeholder="Describe your product"
               />
             </IonItem>
+            {/* File input for image upload */}
             <IonItem>
               <input
                 type="file"
@@ -130,6 +142,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
                 ref={fileInputRef}
               />
             </IonItem>
+            {/* Error message display */}
             {error && (
               <IonItem>
                 <IonLabel color="danger">{error}</IonLabel>
@@ -138,6 +151,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
           </IonList>
 
           <IonGrid className="ion-padding-top">
+            {/* Display uploaded images */}
             <IonRow>
               {uploadedImageUrls.map((url, index) => (
                 <IonCol size="4" size-md="2" key={index}>
@@ -145,6 +159,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
                 </IonCol>
               ))}
             </IonRow>
+            {/* Submit button */}
             <IonRow>
               <IonCol size="12" className="submit-button-container">
                 <IonButton
@@ -160,6 +175,7 @@ function AddProduct({ user, setUserInfo, setProductsUpdated }) {
           </IonGrid>
         </IonCardContent>
       </IonCard>
+      {/* Loading indicator for image upload */}
       <IonLoading
         isOpen={loading}
         message={"Uploading images..."}
