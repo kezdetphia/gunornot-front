@@ -19,6 +19,16 @@ import axios from "axios";
 import { setToken, getToken } from "../services/storageService";
 import { useAuth } from "../context/authContext";
 
+//TODO: On ios simulator the password filed doesn't update the value when the user types
+//or the password field loses focus. Therefore the password first time isn't accepted,
+//even if the credentials are correct, but the second time is accepted when the password is updated,
+//by clicking away from the form.
+//This must be an ionic thing, since regular react form onchage updates the state on every keystroke.
+//I already tried to use useRef, with blur to lose focuse before submitting but it didn't work.
+//I also tried setTimeOut with a short delay but didnt work.
+
+//If you dont know an ionic solution I can just create a regular react form with onchage on every keystroke.
+
 const Signin = () => {
   const navigate = useNavigate();
   const { setUserInfo } = useAuth();
@@ -28,6 +38,8 @@ const Signin = () => {
   // Hooks for displaying alerts and loading indicators
   const [alert] = useIonAlert();
   const [present, dismiss] = useIonLoading();
+
+  console.log("login password", password);
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
