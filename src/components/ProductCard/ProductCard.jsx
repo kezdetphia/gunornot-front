@@ -45,12 +45,14 @@ const ProductCard = React.memo(({ product, onSwipe, style }) => {
           const windowWidth = window.innerWidth;
           card.style.transition =
             "0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+
           // Handle swipe left
           if (detail.deltaX > windowWidth / 2) {
             card.style.transform = `translateX(${windowWidth * 1.5}px)`;
             setTimeout(() => {
               onSwipe("left");
-              card.style.transform = ``;
+              card.style.transition = ""; // Reset transition to avoid animation conflicts
+              card.style.transform = ""; // Reset transform after swipe completes
             }, 250);
           }
           // Handle swipe right
@@ -58,7 +60,8 @@ const ProductCard = React.memo(({ product, onSwipe, style }) => {
             card.style.transform = `translateX(-${windowWidth * 1.5}px)`;
             setTimeout(() => {
               onSwipe("right");
-              card.style.transform = ``;
+              card.style.transition = ""; // Reset transition to avoid animation conflicts
+              card.style.transform = ""; // Reset transform after swipe completes
             }, 250);
           }
           // Reset card position if swipe is not far enough
@@ -70,6 +73,51 @@ const ProductCard = React.memo(({ product, onSwipe, style }) => {
       gesture.enable();
     }
   }, [onSwipe]);
+
+  // useEffect(() => {
+  //   const card = cardRef.current;
+  //   if (card) {
+  //     const gesture = createGesture({
+  //       el: card,
+  //       gestureName: "card-swipe",
+  //       onMove: (detail) => {
+  //         // Update card position and rotation based on swipe
+  //         card.style.transform = `translateX(${detail.deltaX}px) rotate(${
+  //           detail.deltaX / 20
+  //         }deg)`;
+  //       },
+  //       onEnd: (detail) => {
+  //         const windowWidth = window.innerWidth;
+  //         card.style.transition =
+  //           "0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+
+  //         // Handle swipe left
+  //         if (detail.deltaX > windowWidth / 2) {
+  //           card.style.transform = `translateX(${windowWidth * 1.5}px)`;
+  //           setTimeout(() => {
+  //             onSwipe("left");
+  //             card.style.transition = ""; // Reset transition to avoid animation conflicts
+  //             card.style.transform = ""; // Reset transform after swipe completes
+  //           }, 250);
+  //         }
+  //         // Handle swipe right
+  //         else if (detail.deltaX < -windowWidth / 2) {
+  //           card.style.transform = `translateX(-${windowWidth * 1.5}px)`;
+  //           setTimeout(() => {
+  //             onSwipe("right");
+  //             card.style.transition = ""; // Reset transition to avoid animation conflicts
+  //             card.style.transform = ""; // Reset transform after swipe completes
+  //           }, 250);
+  //         }
+  //         // Reset card position if swipe is not far enough
+  //         else {
+  //           card.style.transform = ``;
+  //         }
+  //       },
+  //     });
+  //     gesture.enable();
+  //   }
+  // }, [onSwipe]);
 
   // Commented out effect for modal swipe gesture
   // useEffect(() => {
