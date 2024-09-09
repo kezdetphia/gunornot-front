@@ -100,13 +100,33 @@ Replace `<your-backend-url>` with the URL of your backend server.
 
 The app uses Firebase for storage. You need to set up Firebase configuration in the `src/firebase/firebaseConfig.js` file. Here is an example of what the configuration file looks like:
 
-make thi// Import the functions you need from the SDKs you need
+Import the functions you need from the SDKs you need
+
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+STEPS:
+Go to the Firebase website and log in to your Google account. https://firebase.google.com/
+
+In the top right corner, click on "Go to Console".
+
+Click "Create a Project".
+
+Add a project name and follow the steps to complete the setup.
+
+Once your project is created, select the Web option (</>) to add Firebase to your app.
+
+Enter an App name and click "Register App".
+
+If Firebase is not yet installed, run:
+
 // Your web app's Firebase configuration:
+@npm install firebase
+(If you already ran npm install earlier, you can skip this step.)
+
+Copy the provided Firebase configuration code to initialize Firebase, and replace it in your project as necessary. This will look something like:
 
 const firebaseConfig = {
 apiKey: "YOUR_API_KEY",
