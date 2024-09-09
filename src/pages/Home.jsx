@@ -42,7 +42,8 @@ function Home() {
           return (prevIndex + 1) % products.length;
         } else if (direction === "right") {
           // Move to the previous product (circular)
-          return (prevIndex - 1 + products.length) % products.length;
+          return (prevIndex + 1) % products.length;
+          // return (prevIndex - 1 + products.length) % products.length;
         }
         return prevIndex;
       });

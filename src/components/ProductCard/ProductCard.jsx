@@ -23,7 +23,7 @@ const ProductCard = React.memo(({ product, onSwipe, style }) => {
   // const [showModal, setShowModal] = useState(false);
   // const [selectedImage, setSelectedImage] = useState("");
   const cardRef = useRef(null);
-  const modalRef = useRef(null);
+  // const modalRef = useRef(null);
 
   // Custom hook for updating votes
   const { updateVotes, rating } = useUpdateVotes(product?._id);
